@@ -15,6 +15,10 @@ public class Code {
         this.code = code;
     }
 
+    public Code() {
+
+    }
+
     public String getDate() {
         return date;
     }

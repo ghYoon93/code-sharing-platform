@@ -1,78 +1,54 @@
 package me.yghee.codesharingplatform;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 
 @RestController
 public class CodeController {
-    DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private Code code = new Code(LocalDateTime.now().format(FORMATTER), "");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final String TEST_DATE = "2021-09-26 15:00:03";
+
+    private static String codeSnippet = "public static void ...";
+
+    private static Code code = new Code(TEST_DATE, codeSnippet);
+
+
 
     @GetMapping(value = "/code", produces = MediaType.TEXT_HTML_VALUE)
-    public String code() {
-        return "<html>\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>Code</title>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "  <span id=\"load_date\">"+ code.getDate() +"</span>\n" +
-                "<pre>\n" +
-                code.getCode() +
-                "</pre>\n" +
-                "</body>\n" +
-                "</html>";
+    public ResponseEntity<String> code() {
+
+        String html = getTemplate("/templates/code.html");
+        System.out.println(html);
+        html = html.replace("{date}", code.getDate());
+        html = html.replace("{code_snippet}", code.getCode());
+        return ResponseEntity.ok().body(html);
     }
 
     @GetMapping(value = "/code/new", produces = MediaType.TEXT_HTML_VALUE)
-    public String create() {
-        return "<html>\n" +
-                "<head>\n" +
-                "    <meta charset=\"UTF-8\">\n" +
-                "    <title>Create</title>\n" +
-                "    <script>\n" +
-                "      function send() {\n" +
-                "      let object = {\n" +
-                "          \"code\": document.getElementById(\"code_snippet\").value\n" +
-                "      };\n" +
-                "\n" +
-                "      let json = JSON.stringify(object);\n" +
-                "\n" +
-                "      let xhr = new XMLHttpRequest();\n" +
-                "      xhr.open(\"POST\", '/api/code/new', false)\n" +
-                "      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');\n" +
-                "      xhr.send(json);\n" +
-                "\n" +
-                "      if (xhr.status == 200) {\n" +
-                "        alert(\"Success!\");\n" +
-                "      }\n" +
-                "}\n" +
-                "    </script>\n" +
-                "</head>\n" +
-                "<body>\n" +
-                "  <textarea id=\"code_snippet\" placeholder=\"// 코드 작성\"></textarea>\n" +
-                "  <div>" +
-                "    <button id=\"send_snippet\" type=\"submit\" onclick=\"send()\">Submit</button>\n" +
-                "  </div>" +
-                "</body>\n" +
-                "</html>";
+    public ResponseEntity<String> create() {
+        String html = getTemplate("/templates/new.html");
+        return ResponseEntity.ok()
+                .body(html);
     }
 
-    @GetMapping("/api/code")
-    @ResponseBody
-    public Code apiCode() {
-        return code;
+    private String getTemplate(String path) {
+        try {
+            File template = new ClassPathResource(path).getFile();
+            return Files.readString(template.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "x";
+        }
     }
 
-    @ResponseBody
-    @PostMapping("/api/code/new")
-    public String post(@RequestBody Code code) {
-        code.setDate(LocalDateTime.now().format(FORMATTER));
-        this.code = code;
-        return "{}";
+    public static void setCode(Code newCode) {
+        code = newCode;
     }
-
 }
