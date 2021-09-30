@@ -1,18 +1,14 @@
 package me.yghee.codesharingplatform;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Controller
 public class CodeController {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String TEST_DATE = "2021-09-26 15:00:03";
@@ -23,31 +19,16 @@ public class CodeController {
     private static List<Code> codes = new ArrayList<>();
 
 
-    @GetMapping(value = "/code", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> code() {
+    @GetMapping(value = "/code")
+    public String code(Model model) {
+        model.addAttribute(code);
 
-        String html = getTemplate("/templates/code.html");
-        System.out.println(html);
-        html = html.replace("{date}", code.getDate());
-        html = html.replace("{code_snippet}", code.getCode());
-        return ResponseEntity.ok().body(html);
+        return "code";
     }
 
-    @GetMapping(value = "/code/new", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> create() {
-        String html = getTemplate("/templates/new.html");
-        return ResponseEntity.ok()
-                .body(html);
-    }
-
-    private String getTemplate(String path) {
-        try {
-            File template = new ClassPathResource(path).getFile();
-            return Files.readString(template.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "x";
-        }
+    @GetMapping(value = "/code/new")
+    public String create() {
+        return "new";
     }
 
     public static void addCode(Code newCode) {
