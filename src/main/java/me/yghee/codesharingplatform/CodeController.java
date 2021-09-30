@@ -10,19 +10,12 @@ import java.util.List;
 
 @Controller
 public class CodeController {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final String TEST_DATE = "2021-09-26 15:00:03";
 
-    private static String codeSnippet = "public static void ...";
-
-    private static Code code = new Code(TEST_DATE, codeSnippet);
     private static List<Code> codes = new ArrayList<>();
 
-
-    @GetMapping(value = "/code")
-    public String code(Model model) {
-        model.addAttribute(code);
-
+    @GetMapping(value = "/code/{id}")
+    public String code(Model model, @PathVariable int id) {
+        model.addAttribute(codes.get(id - 1));
         return "code";
     }
 
