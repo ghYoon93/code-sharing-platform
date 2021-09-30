@@ -9,14 +9,10 @@ import java.util.List;
 
 @RestController
 public class CodeApiController {
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private static final String TEST_DATE = "2021-09-26 15:00:03";
 
-    private static String codeSnippet = "public static void ...";
-
-    private Code code = new Code(TEST_DATE, codeSnippet);
     private List<Code> codes = new ArrayList<>();
-
 
     @GetMapping("/api/code/{id}")
     public Code apiCode(@PathVariable int id) {
@@ -24,10 +20,10 @@ public class CodeApiController {
     }
 
     @PostMapping("/api/code/new")
-    public Code post(@RequestBody Code newCode) {
+    public String post(@RequestBody Code newCode) {
         newCode.setDate(LocalDateTime.now().format(FORMATTER));
         codes.add(newCode);
         CodeController.addCode(newCode);
-        return this.code;
+        return "{ \"id\" : \"" + codes.size() + "\" }";
     }
 }
