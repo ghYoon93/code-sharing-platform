@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class CodeController {
@@ -18,7 +20,7 @@ public class CodeController {
     private static String codeSnippet = "public static void ...";
 
     private static Code code = new Code(TEST_DATE, codeSnippet);
-
+    private static List<Code> codes = new ArrayList<>();
 
 
     @GetMapping(value = "/code", produces = MediaType.TEXT_HTML_VALUE)
@@ -48,7 +50,7 @@ public class CodeController {
         }
     }
 
-    public static void setCode(Code newCode) {
-        code = newCode;
+    public static void addCode(Code newCode) {
+        codes.add(newCode);
     }
 }

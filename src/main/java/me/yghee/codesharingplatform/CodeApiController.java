@@ -4,6 +4,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class CodeApiController {
@@ -13,21 +15,19 @@ public class CodeApiController {
     private static String codeSnippet = "public static void ...";
 
     private Code code = new Code(TEST_DATE, codeSnippet);
+    private List<Code> codes = new ArrayList<>();
 
 
-    @GetMapping("/api/code")
-    @ResponseBody
-    public Code apiCode() {
-        return code;
+    @GetMapping("/api/code/{id}")
+    public Code apiCode(@PathVariable int id) {
+        return codes.get(id - 1);
     }
 
-    @ResponseBody
     @PostMapping("/api/code/new")
     public Code post(@RequestBody Code newCode) {
-        System.out.println(newCode.getCode());
         newCode.setDate(LocalDateTime.now().format(FORMATTER));
-        this.code = newCode;
-        CodeController.setCode(this.code);
+        codes.add(newCode);
+        CodeController.addCode(newCode);
         return this.code;
     }
 }
