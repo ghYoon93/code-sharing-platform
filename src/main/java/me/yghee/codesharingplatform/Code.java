@@ -2,17 +2,15 @@ package me.yghee.codesharingplatform;
 
 public class Code {
 
-    private String date;
-
     private String code;
-
+    private String date;
     public Code(String code) {
         this.code = code;
     }
 
-    public Code(String date, String code) {
-        this.date = date;
+    public Code(String code, String date) {
         this.code = code;
+        this.date = date;
     }
 
     public Code() {

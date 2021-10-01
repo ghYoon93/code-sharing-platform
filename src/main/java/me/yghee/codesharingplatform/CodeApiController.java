@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,5 +27,10 @@ public class CodeApiController {
         newCode.setDate(LocalDateTime.now().format(FORMATTER));
 
         return "{ \"id\" : \"" + codes.add(newCode) + "\" }";
+    }
+
+    @GetMapping("/api/code/latest")
+    public List<Code> latest() {
+        return codes.getLatest();
     }
 }
