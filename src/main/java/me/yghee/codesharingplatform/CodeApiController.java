@@ -17,10 +17,10 @@ public class CodeApiController {
 
     @GetMapping("/api/code/{id}")
     public ResponseEntity<?> apiCode(@PathVariable int id) {
-        if (codes.size() == 0) {
-            return ResponseEntity.badRequest().body("there's no code");
+        if (codes.size() == id) {
+            return ResponseEntity.badRequest().body("There's no such code");
         }
-        return ResponseEntity.ok(codes.get(id - 1));
+        return ResponseEntity.ok(codes.get(id));
     }
 
     @PostMapping("/api/code/new")
