@@ -1,5 +1,6 @@
 package me.yghee.codesharingplatform;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,8 +16,11 @@ public class CodeApiController {
     private List<Code> codes = new ArrayList<>();
 
     @GetMapping("/api/code/{id}")
-    public Code apiCode(@PathVariable int id) {
-        return codes.get(id - 1);
+    public ResponseEntity<?> apiCode(@PathVariable int id) {
+        if (codes.size() == 0) {
+            return ResponseEntity.badRequest().body("there's no code");
+        }
+        return ResponseEntity.ok(codes.get(id - 1));
     }
 
     @PostMapping("/api/code/new")
