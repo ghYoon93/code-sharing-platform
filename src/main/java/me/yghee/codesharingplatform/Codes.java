@@ -29,9 +29,9 @@ public class Codes {
     public List<Code> getLatest() {
         List<Code> latest = new ArrayList<>();
         if (codeList.size() < 12) {
-            latest = codeList.subList(1, codeList.size());
+            latest = new ArrayList<>(codeList.subList(1, codeList.size()));
         } else {
-            codeList.subList(codeList.size() - 2, codeList.size());
+            latest = new ArrayList<>(codeList.subList(codeList.size() - 10, codeList.size()));
         }
 
         Collections.reverse(latest);

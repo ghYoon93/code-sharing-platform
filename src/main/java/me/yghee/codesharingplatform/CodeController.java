@@ -4,6 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class CodeController {
 
@@ -18,8 +21,15 @@ public class CodeController {
         return "code";
     }
 
-    @GetMapping(value = "/code/new")
+    @GetMapping("/code/new")
     public String create() {
         return "new";
+    }
+
+    @GetMapping("/code/latest")
+    public String latest(Model model) {
+        List<Code> codes = this.codes.getLatest();
+        model.addAttribute("codes", codes);
+        return "latest";
     }
 }
