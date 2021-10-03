@@ -1,4 +1,7 @@
-package me.yghee.codesharingplatform;
+package me.yghee.codesharingplatform.domain;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Code {
 
@@ -21,8 +24,8 @@ public class Code {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(LocalDateTime date) {
+        this.date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public String getCode() {
