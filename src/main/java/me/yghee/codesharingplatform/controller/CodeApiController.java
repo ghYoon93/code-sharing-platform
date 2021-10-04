@@ -4,7 +4,7 @@ import me.yghee.codesharingplatform.domain.Code;
 import me.yghee.codesharingplatform.service.CodeService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Deque;
+import java.util.List;
 
 @RestController
 public class CodeApiController {
@@ -16,21 +16,21 @@ public class CodeApiController {
     }
 
     @GetMapping("/api/code/{id}")
-    public Code apiCode(@PathVariable int id) {
+    public Code apiCode(@PathVariable Long id) {
 
         return codeService.getCode(id);
     }
 
     @PostMapping("/api/code/new")
     public String post(@RequestBody Code resource) {
-        long id = codeService.postCode(resource);
+        Code code = codeService.postCode(resource);
 
 
-        return "{ \"id\" : \"" + id + "\" }";
+        return "{ \"id\" : \"" + code.getId() + "\" }";
     }
 
     @GetMapping("/api/code/latest")
-    public Deque<Code> latest() {
+    public List<Code> latest() {
         return codeService.getLatest();
     }
 }

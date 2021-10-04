@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Deque;
+import java.util.List;
 
 @Controller
 public class CodeController {
@@ -18,7 +18,7 @@ public class CodeController {
     }
 
     @GetMapping(value = "/code/{id}")
-    public String code(Model model, @PathVariable int id) {
+    public String code(Model model, @PathVariable Long id) {
         Code code = codeService.getCode(id);
         model.addAttribute(code);
         return "code";
@@ -31,7 +31,7 @@ public class CodeController {
 
     @GetMapping("/code/latest")
     public String latest(Model model) {
-        Deque<Code> codes = codeService.getLatest();
+        List<Code> codes = codeService.getLatest();
         model.addAttribute("codes", codes);
         return "latest";
     }

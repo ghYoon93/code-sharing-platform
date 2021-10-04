@@ -25,7 +25,7 @@ class CodeControllerTests {
 
     @Test
     void detailWithNotExisted() {
-        given(codeService.getCode(1)).willThrow(new CodeNotFoundException(1));
+        given(codeService.getCode(1L)).willThrow(new CodeNotFoundException(1L));
         String body = restTemplate.getForObject("/code/1", String.class);
 
         assertThat(body).contains("{}");

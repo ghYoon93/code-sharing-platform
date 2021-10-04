@@ -14,7 +14,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +39,7 @@ class CodeApiControllerTests {
 
     @Test
     public void detailWithNotExisted() throws Exception {
-        given(codeService.getCode(1)).willThrow(new CodeNotFoundException(1));
+        given(codeService.getCode(1L)).willThrow(new CodeNotFoundException(1L));
         mvc.perform(get("/api/code/1"))
             .andExpect(status().isNotFound())
             .andExpect(content().string("{}"));
@@ -45,8 +47,6 @@ class CodeApiControllerTests {
 
     @Test
     public void createCode() throws Exception {
-
-        given(codeService.postCode(any())).willReturn(1);
 
         mvc.perform(post("/api/code/new")
             .contentType(MediaType.APPLICATION_JSON)
@@ -60,12 +60,12 @@ class CodeApiControllerTests {
 
     @Test
     public void latestList() throws Exception {
-        Deque<Code> latests = new ArrayDeque<>();
-        for (int i = 0; i < 10; i++) {
-            latests.addFirst(new Code(("code" +  (i + 1)), "2021-10-01 20:00:00"));
+        List<Code> latest = new ArrayList<>();
+        for (int i = 10; i > 0; i--) {
+            latest.add(new Code(("code" +  (i + 1)), "2021-10-01 20:00:00"));
         }
 
-        given(codeService.getLatest()).willReturn(latests);
+        given(codeService.getLatest()).willReturn(latest);
 
         mvc.perform(get("/api/code/latest")
             .contentType(MediaType.APPLICATION_JSON))

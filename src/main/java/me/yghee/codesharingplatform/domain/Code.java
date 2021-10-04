@@ -1,12 +1,23 @@
 package me.yghee.codesharingplatform.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
 public class Code {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     private String code;
     private String date;
+
     public Code(String code) {
         this.code = code;
     }
@@ -18,6 +29,14 @@ public class Code {
 
     public Code() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDate() {
